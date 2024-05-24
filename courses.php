@@ -104,7 +104,7 @@
 		</div>
 
 
-	<!-- banner section -->
+	<!-- banner section 
 	<section class="banner-section spad">
 		<div class="container">
 			<div class="section-title mb-0 pb-2">
@@ -116,7 +116,7 @@
 			</div>
 		</div>
 	</section>
-	<!-- banner section end -->
+	 banner section end -->
 
 
 	<?php include 'footersection.php'; ?>

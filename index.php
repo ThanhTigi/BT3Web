@@ -6,21 +6,30 @@ include ("connect.php");
 // Lấy dữ liệu từ cơ sở dữ liệu
 $sql = "SELECT MaKhoaHoc, TenKhoaHoc, GiaTien, ThoiLuong, SLDaBan, LoaiKhoaHoc FROM khoa_hoc";
 $result = mysqli_query($conn, $sql);
-
+$sum = 0;
 // Mảng kết hợp để lưu trữ số lượng đã bán cho mỗi loại khóa học
 $soluongdaban = [];
-
+$soluongkhoahoc = [];
+$tilesoluong = [];
 if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $loaikhoahoc = $row['LoaiKhoaHoc'];
-        // Nếu loại khóa học đã tồn tại trong mảng soluongdaban, cập nhật số lượng đã bán
-        if (array_key_exists($loaikhoahoc, $soluongdaban)) {
-            $soluongdaban[$loaikhoahoc] += $row['SLDaBan'];
-        } else {
-            // Nếu không, thêm mới loại khóa học vào mảng soluongdaban
-            $soluongdaban[$loaikhoahoc] = $row['SLDaBan'];
-        }
-    }
+	while ($row = mysqli_fetch_assoc($result)) {
+		$loaikhoahoc = $row['LoaiKhoaHoc'];
+		// Nếu loại khóa học đã tồn tại trong mảng soluongdaban, cập nhật số lượng đã bán
+		if (array_key_exists($loaikhoahoc, $soluongdaban)) {
+			$soluongdaban[$loaikhoahoc] += $row['SLDaBan'];
+		} else {
+			// Nếu không, thêm mới loại khóa học vào mảng soluongdaban
+			$soluongdaban[$loaikhoahoc] = $row['SLDaBan'];
+		}
+		if (array_key_exists($loaikhoahoc, $soluongkhoahoc)) {
+			$soluongkhoahoc[$loaikhoahoc] += 1;
+		} else {
+			// Nếu không, thêm mới loại khóa học vào mảng soluongdaban
+			$soluongkhoahoc[$loaikhoahoc] = 1;
+		}
+
+		$sum += $row['SLDaBan'];
+	}
 }
 ?>
 
@@ -46,6 +55,9 @@ if (mysqli_num_rows($result) > 0) {
 	<link rel="stylesheet" href="css/owl.carousel.css" />
 	<link rel="stylesheet" href="css/style.css" />
 
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 	<!--[if lt IE 9]>
 	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -65,12 +77,9 @@ if (mysqli_num_rows($result) > 0) {
 	<?php
 	if (isset($_SESSION['user_data']) && $_SESSION['user_data']) {
 		?>
-		<section class="hero-section set-bg" data-setbg="img/bg.jpg">
-			<div class="hero-text text-white">
-				<?php
-				?>
-			</div>
-		</section>
+		<div class="page-info-section set-bg" data-setbg="img/page-bg/1.jpg">
+
+		</div>
 		<?php
 	} else {
 		?>
@@ -92,171 +101,199 @@ if (mysqli_num_rows($result) > 0) {
 	}
 	?>
 
+	<?php
+	if (isset($_SESSION['user_data']) && $_SESSION['user_data']) {
+		?>
+		<div class="container mb-10" style="margin-top:94px;" id="khohang-card">
+			<div class="row">
+				<div class="col-md-10">
+					<h2>Danh sách các khóa học</h2>
+					<p>Số lượng khóa học đã bán</p>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>STT</th>
+								<th>Loại Khóa Học</th>
+								<th>Số lượng Khóa Học</th>
+								<th>Số Lượng Đã Bán</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							// Đếm số thứ tự
+							$cnt_stt = 1;
 
-<div class="container mb-10" style="margin-top:94px;" id="khohang-card">
-    <div class="row">
-        <div class="col-md-10">
-            <h2>Danh sách các khóa học</h2>
-            <p>Số lượng khóa học đã bán</p>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>STT</th>
-					<th>Loại Khóa Học</th>
-                    <th>Số Lượng Đã Bán</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                // Đếm số thứ tự
-                $cnt_stt = 1;
-                
-                // Lặp qua mảng soluongdaban để hiển thị thông tin trong bảng
-                foreach ($soluongdaban as $loai => $soluong) {
-                    echo '<tr>
+							// Lặp qua mảng soluongdaban để hiển thị thông tin trong bảng
+							foreach ($soluongdaban as $loai => $soluong) {
+								$tilesoluong[$loai] = $soluong / $sum * 100;
+								echo '<tr>
                         <td>' . $cnt_stt++ . '</td>
                         <td>' . $loai . '</td>
+						<td>' . $soluongkhoahoc[$loai] . '</td>
                         <td>' . $soluong . '</td>
                     </tr>';
-                }
-                ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-8">
-            <div class="container" style="width: 50%;">
-                <h2 class="text-center">Biểu đồ tỉ lệ loại khóa học đã bán</h2>
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <canvas id="myPieChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<!-- Custom JS to create the chart -->
-<script>
-    // Data for the pie chart
-    const data = {
-        labels: <?php echo json_encode(array_keys($soluongdaban)); ?>,
-        datasets: [{
-            label: 'Tỉ lệ loại khóa học đã bán',
-            data: <?php echo json_encode(array_values($soluongdaban)); ?>,
-            backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(153, 102, 255)',
-                'rgb(255, 159, 64)',
-                'rgb(102, 255, 204)',
-                'rgb(51, 102, 255)'
-            ],
-            hoverOffset: 4
-        }]
-    };
-
-    // Configuration for the pie chart
-    const config = {
-        type: 'pie',
-        data: data,
-    };
-
-    // Render the pie chart
-    const myPieChart = new Chart(
-        document.getElementById('myPieChart'),
-        config
-    );
-</script>
-
-		<!-- Phần danh mục 
-	<section class="categories-section spad">
-		<div class="container">
-			<div class="section-title">
-				<h2>Các Danh Mục Khóa Học Của Chúng Tôi</h2>
+							}
+							?>
+						</tbody>
+					</table>
+				</div>
 			</div>
+
 			<div class="row">
-				<a href="#" class="col-lg-4 col-md-6 btn btn-default">
-					<div class="categorie-item">
-						<div class="ci-thumb set-bg" data-setbg="img/categories/1.jpg"></div>
-						<div class="ci-text">
-							<h5>IT Developer</h5>
-							<p>Các khóa học về lập trình</p>
-							<span>120 Khóa Học</span>
+				<div class="col-md-8">
+					<div class="container" style="width: 100%;">
+						<h2 class="text-center">Biểu đồ tỉ lệ loại khóa học đã bán</h2>
+						<div class="row justify-content-center">
+							<div class="col-md-6">
+								<canvas id="myPieChart"></canvas>
+							</div>
 						</div>
 					</div>
-				</a>
-
-				<a href="#" class="col-lg-4 col-md-6 btn btn-default">
-					<div class="categorie-item">
-						<div class="ci-thumb set-bg" data-setbg="img/categories/2.jpg"></div>
-						<div class="ci-text">
-							<h5>Thiết Kế Web</h5>
-							<p>Các khóa học về thiết kế Web</p>
-							<span>70 Khóa Học</span>
-						</div>
-					</div>
-				</a>
-
-				<a href="#" class="col-lg-4 col-md-6 btn btn-default">
-					<div class="categorie-item">
-						<div class="ci-thumb set-bg" data-setbg="img/categories/3.jpg"></div>
-						<div class="ci-text">
-							<h5>Nhiếp ảnh</h5>
-							<p>Các khóa học về chụp ảnh, máy ảnh</p>
-							<span>55 Khóa Học</span>
-						</div>
-					</div>
-				</a>
-
-				<a href="#" class="col-lg-4 col-md-6 btn btn-default">
-					<div class="categorie-item">
-						<div class="ci-thumb set-bg" data-setbg="img/categories/4.jpg"></div>
-						<div class="ci-text">
-							<h5>Môn học đại cương</h5>
-							<p>Các khóa học về các môn đại cương</p>
-							<span>40 Khóa Học</span>
-						</div>
-					</div>
-				</a>
-
-				<a href="#" class="col-lg-4 col-md-6 btn btn-default">
-					<div class="categorie-item">
-						<div class="ci-thumb set-bg" data-setbg="img/categories/5.jpg"></div>
-						<div class="ci-text">
-							<h5>Photoshop</h5>
-							<p>Các khóa học về photoshop, chỉnh sửa ảnh</p>
-							<span>220 Khóa Học</span>
-						</div>
-					</div>
-				</a>
-
-				<a href="#" class="col-lg-4 col-md-6 btn btn-default">
-					<div class="categorie-item">
-						<div class="ci-thumb set-bg" data-setbg="img/categories/6.jpg"></div>
-						<div class="ci-text">
-							<h5>Tiền Kỹ Thuật Số</h5>
-							<p>Các khóa học về tài chính Blockchain</p>
-							<span>25 Khóa Học</span>
-						</div>
-					</div>
-				</a>
-
+				</div>
 			</div>
 		</div>
-	</section>
+
+		<!-- Bootstrap JS -->
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+		<!-- Custom JS to create the chart -->
+		<script>
+			// Data for the pie chart
+			const data = {
+				labels: <?php echo json_encode(array_keys($tilesoluong)); ?>,
+				datasets: [{
+					label: 'Tỉ lệ loại khóa học đã bán',
+					data: <?php echo json_encode(array_values($tilesoluong)); ?>,
+					backgroundColor: [
+						'rgb(255, 99, 132)',
+						'rgb(54, 162, 235)',
+						'rgb(255, 205, 86)',
+						'rgb(75, 192, 192)',
+						'rgb(153, 102, 255)',
+						'rgb(255, 159, 64)',
+						'rgb(102, 255, 204)',
+						'rgb(51, 102, 255)'
+					],
+					hoverOffset: 4
+				}]
+			};
+
+			// Configuration for the pie chart
+			const config = {
+				type: 'pie',
+				data: data,
+			};
+
+			// Render the pie chart
+			const myPieChart = new Chart(
+				document.getElementById('myPieChart'),
+				config
+			);
+		</script>
+		<?php
+	} else {
+		?>
+		<section class="categories-section spad">
+			<div class="container">
+				<div class="section-title">
+					<h2>Các Danh Mục Khóa Học Của Chúng Tôi</h2>
+				</div>
+				<div class="row">
+					<a href="#" class="col-lg-4 col-md-6 btn btn-default">
+						<div class="categorie-item">
+							<div class="ci-thumb set-bg" data-setbg="img/categories/1.jpg"></div>
+							<div class="ci-text">
+								<h5>IT Developer</h5>
+								<p>Các khóa học về lập trình</p>
+								<?php
+									echo '<span>'.$soluongkhoahoc['IT Developer'].' Khóa Học</span>'
+								?>
+								
+							</div>
+						</div>
+					</a>
+
+					<a href="#" class="col-lg-4 col-md-6 btn btn-default">
+						<div class="categorie-item">
+							<div class="ci-thumb set-bg" data-setbg="img/categories/2.jpg"></div>
+							<div class="ci-text">
+								<h5>Thiết Kế Web</h5>
+								<p>Các khóa học về thiết kế Web</p>
+								<?php
+									echo '<span>'.$soluongkhoahoc['Thiết Kế Web'].' Khóa Học</span>'
+								?>
+							</div>
+						</div>
+					</a>
+
+					<a href="#" class="col-lg-4 col-md-6 btn btn-default">
+						<div class="categorie-item">
+							<div class="ci-thumb set-bg" data-setbg="img/categories/3.jpg"></div>
+							<div class="ci-text">
+								<h5>Nhiếp ảnh</h5>
+								<p>Các khóa học về chụp ảnh, máy ảnh</p>
+								<?php
+									echo '<span>'.$soluongkhoahoc['Nhiếp ảnh'].' Khóa Học</span>'
+								?>
+							</div>
+						</div>
+					</a>
+
+					<a href="#" class="col-lg-4 col-md-6 btn btn-default">
+						<div class="categorie-item">
+							<div class="ci-thumb set-bg" data-setbg="img/categories/4.jpg"></div>
+							<div class="ci-text">
+								<h5>Môn học đại cương</h5>
+								<p>Các khóa học về các môn đại cương</p>
+								<?php
+									echo '<span>'.$soluongkhoahoc['Môn học đại cương'].' Khóa Học</span>'
+								?>
+							</div>
+						</div>
+					</a>
+
+					<a href="#" class="col-lg-4 col-md-6 btn btn-default">
+						<div class="categorie-item">
+							<div class="ci-thumb set-bg" data-setbg="img/categories/5.jpg"></div>
+							<div class="ci-text">
+								<h5>Photoshop</h5>
+								<p>Các khóa học về photoshop, chỉnh sửa ảnh</p>
+								<?php
+									echo '<span>'.$soluongkhoahoc['Photoshop'].' Khóa Học</span>'
+								?>
+							</div>
+						</div>
+					</a>
+
+					<a href="#" class="col-lg-4 col-md-6 btn btn-default">
+						<div class="categorie-item">
+							<div class="ci-thumb set-bg" data-setbg="img/categories/6.jpg"></div>
+							<div class="ci-text">
+								<h5>Tiền Kỹ Thuật Số</h5>
+								<p>Các khóa học về tài chính Blockchain</p>
+								<?php
+									echo '<span>'.$soluongkhoahoc['Tiền Kỹ Thuật Số'].' Khóa Học</span>'
+								?>
+							</div>
+						</div>
+					</a>
+
+				</div>
+			</div>
+		</section>
+		<?php
+	}
+	?>
+
+
+
+
+	<!-- Phần danh mục 
+	
 	Kết thúc phần danh mục -->
 
 
 
-		<!-- Phần tìm kiếm 
+	<!-- Phần tìm kiếm 
 	<section class="search-section">
 		<div class="container">
 			<div class="search-warp">
@@ -277,7 +314,7 @@ if (mysqli_num_rows($result) > 0) {
 	 Kết thúc phần tìm kiếm -->
 
 
-		<!-- Phần khóa học 
+	<!-- Phần khóa học 
 	<section class="course-section spad">
 		<div class="container">
 			<div class="section-title mb-0">
@@ -445,7 +482,7 @@ if (mysqli_num_rows($result) > 0) {
 
 
 
-		<!-- banner section 
+	<!-- banner section 
 	<section class="banner-section spad">
 		<div class="container">
 			<div class="section-title mb-0 pb-2">
@@ -460,15 +497,15 @@ if (mysqli_num_rows($result) > 0) {
 	banner section end -->
 
 
-		<?php include 'footersection.php'; ?>
+	<?php include 'footersection.php'; ?>
 
 
-		<!--====== Javascripts & Jquery ======-->
-		<script src="js/jquery-3.2.1.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/mixitup.min.js"></script>
-		<script src="js/circle-progress.min.js"></script>
-		<script src="js/owl.carousel.min.js"></script>
-		<script src="js/main.js"></script>
+	<!--====== Javascripts & Jquery ======-->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/mixitup.min.js"></script>
+	<script src="js/circle-progress.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/main.js"></script>
 
 </html>

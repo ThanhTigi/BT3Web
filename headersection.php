@@ -23,10 +23,10 @@
 				<nav class="main-menu">
 					<ul>
 						<li><a href="index.php">Trang chủ</a></li>
-						<li><a href="about.php">Giới thiệu</a></li>
 						<li><a href="courses.php">Các khóa học</a></li>
-						<li><a href="blogs.php">Blogs</a></li>
-						<li><a href="contact.php">Liên hệ</a></li>
+						<li><a href="insertcourse.php">Thêm khóa học</a></li>
+						<li><a href="updatecourse.php">Sửa khóa học</a></li>
+						<li><a href="deletecourse.php">Xóa khóa học</a></li>
 					</ul>
 				</nav>
 			</div>

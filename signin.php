@@ -1,22 +1,24 @@
 <?php
-	session_start();
-	ob_start();
-	include "user.php";
-	if (isset($_SESSION["signupsuccess"]) && $_SESSION['signupsuccess']) {
-		echo 'Đăng ký thành công';
-		unset($_SESSION["signupsuccess"]);
+session_start();
+ob_start();
+include("user.php");
+if (isset($_SESSION["signupsuccess"]) && $_SESSION['signupsuccess']) {
+	echo 'Đăng ký thành công';
+	unset($_SESSION["signupsuccess"]);
+}
+if (isset($_POST["dangnhap"]) && $_POST["dangnhap"]) {
+
+
+	$user = $_POST['username'];
+	$pass = $_POST['password'];
+	$user_data = checkUser($user, $pass);
+	if ($user_data) {
+		$_SESSION['user_data'] = $user_data;
+		header('location: index.php');
+		echo 'Đăng nhập thành công';
+	} else {
+		echo 'Tài khoản hoặc mật khẩu không đúng';
 	}
-	if (isset($_POST["dangnhap"]) && $_POST["dangnhap"]) {
-		$user = $_POST['username'];
-		$pass = $_POST['password'];
-		$user_data = checkUser($user, $pass);
-		if ($user_data) {
-			$_SESSION['user_data'] = $user_data;
-			header('location: index.php');
-			echo 'Đăng nhập thành công';
-		} else {
-			echo 'Tài khoản hoặc mật khẩu không đúng';
-		}
 }
 ?>
 
@@ -57,7 +59,7 @@
 		<div class="loader"></div>
 	</div>
 	<?php include 'headersection.php'; ?>
-    <!-- Hero section -->
+	<!-- Hero section -->
 	<section class="hero-section set-bg" data-setbg="img/bg.jpg">
 		<div class="container">
 			<div class="hero-text text-white">
@@ -65,10 +67,12 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
-					<form action = "<?php echo $_SERVER['PHP_SELF'];?>" method = "post">
-						<input name="username" type="username" style="height: 60px; width: 350px" placeholder="Nhập tên đăng nhập">
-						<input name="password" type="password" style="height: 60px; width: 350px" placeholder="Nhập mật khẩu">
-						<input class="site-btn" type = "submit" name = "dangnhap" value = "Đăng nhập"></input>
+					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+						<input name="username" type="username" style="height: 60px; width: 350px"
+							placeholder="Nhập tên đăng nhập">
+						<input name="password" type="password" style="height: 60px; width: 350px"
+							placeholder="Nhập mật khẩu">
+						<input class="site-btn" type="submit" name="dangnhap" value="Đăng nhập"></input>
 					</form>
 				</div>
 			</div>
