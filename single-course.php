@@ -1,6 +1,9 @@
 <?php 
 	session_start();
 	ob_start();
+	if (!isset($_SESSION['user_data'])){
+		header('location: signin.php');
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">

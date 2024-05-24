@@ -72,13 +72,14 @@ if (mysqli_num_rows($result) > 0) {
 		<div class="loader"></div>
 	</div>
 
-	<?php include 'headersection.php'; ?>
+	<?php
+	include 'headersection.php';
+	?>
 
 	<?php
 	if (isset($_SESSION['user_data']) && $_SESSION['user_data']) {
 		?>
 		<div class="page-info-section set-bg" data-setbg="img/page-bg/1.jpg">
-
 		</div>
 		<?php
 	} else {
@@ -205,9 +206,9 @@ if (mysqli_num_rows($result) > 0) {
 								<h5>IT Developer</h5>
 								<p>Các khóa học về lập trình</p>
 								<?php
-									echo '<span>'.$soluongkhoahoc['IT Developer'].' Khóa Học</span>'
-								?>
-								
+								echo '<span>' . $soluongkhoahoc['IT Developer'] . ' Khóa Học</span>'
+									?>
+
 							</div>
 						</div>
 					</a>
@@ -219,8 +220,8 @@ if (mysqli_num_rows($result) > 0) {
 								<h5>Thiết Kế Web</h5>
 								<p>Các khóa học về thiết kế Web</p>
 								<?php
-									echo '<span>'.$soluongkhoahoc['Thiết Kế Web'].' Khóa Học</span>'
-								?>
+								echo '<span>' . $soluongkhoahoc['Thiết Kế Web'] . ' Khóa Học</span>'
+									?>
 							</div>
 						</div>
 					</a>
@@ -232,8 +233,8 @@ if (mysqli_num_rows($result) > 0) {
 								<h5>Nhiếp ảnh</h5>
 								<p>Các khóa học về chụp ảnh, máy ảnh</p>
 								<?php
-									echo '<span>'.$soluongkhoahoc['Nhiếp ảnh'].' Khóa Học</span>'
-								?>
+								echo '<span>' . $soluongkhoahoc['Nhiếp ảnh'] . ' Khóa Học</span>'
+									?>
 							</div>
 						</div>
 					</a>
@@ -245,8 +246,8 @@ if (mysqli_num_rows($result) > 0) {
 								<h5>Môn học đại cương</h5>
 								<p>Các khóa học về các môn đại cương</p>
 								<?php
-									echo '<span>'.$soluongkhoahoc['Môn học đại cương'].' Khóa Học</span>'
-								?>
+								echo '<span>' . $soluongkhoahoc['Môn học đại cương'] . ' Khóa Học</span>'
+									?>
 							</div>
 						</div>
 					</a>
@@ -258,8 +259,8 @@ if (mysqli_num_rows($result) > 0) {
 								<h5>Photoshop</h5>
 								<p>Các khóa học về photoshop, chỉnh sửa ảnh</p>
 								<?php
-									echo '<span>'.$soluongkhoahoc['Photoshop'].' Khóa Học</span>'
-								?>
+								echo '<span>' . $soluongkhoahoc['Photoshop'] . ' Khóa Học</span>'
+									?>
 							</div>
 						</div>
 					</a>
@@ -271,8 +272,8 @@ if (mysqli_num_rows($result) > 0) {
 								<h5>Tiền Kỹ Thuật Số</h5>
 								<p>Các khóa học về tài chính Blockchain</p>
 								<?php
-									echo '<span>'.$soluongkhoahoc['Tiền Kỹ Thuật Số'].' Khóa Học</span>'
-								?>
+								echo '<span>' . $soluongkhoahoc['Tiền Kỹ Thuật Số'] . ' Khóa Học</span>'
+									?>
 							</div>
 						</div>
 					</a>

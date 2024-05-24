@@ -1,6 +1,9 @@
 <?php
 session_start();
 ob_start();
+if (!isset($_SESSION['user_data'])) {
+    header('location: signin.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,45 +58,74 @@ ob_start();
 
     <div class="container-fluid p-0 height">
 
-    <div class="container " style="margin-top: 100px;" id="body-kho1">
+        <div class="container " style="margin-top: 100px;" id="body-kho1">
             <h4 class="text-center">Nhập Khóa Học đã có:</h4>
             <form action="xu_ly_sua_khoa_hoc.php" method="post">
                 <div class="mb-3 mt-3">
                     <label for="makhoahoc" class="form-label">Tên Khóa Học:</label>
-                    <!-- <input type="text" class="form-control" id="tensp" placeholder="nhập tên sản phẩm" name="tensp"> -->
-                    <select class="form-select" id="makhoahoc" name="id">
+                    <select class="form-select" id="makhoahoc" name="makhoahoc">
                         <?php
-                        include("connect.php");
-                        $sql = "SELECT * FROM khoa_hoc";
-                        $result = mysqli_query($conn, $sql);
-                        // Xử lý kết quả
-                        if (mysqli_num_rows($result) > 0) {
-                            // Lặp qua từng dòng dữ liệu
+                        include ("connect.php");
+                        if (isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $sql = "SELECT * FROM khoa_hoc WHERE MaKhoaHoc = '$id'";
 
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                // Xử lý dòng dữ liệu, ví dụ:
-                        ?>
-                                <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                            // Thực thi truy vấn
+                            $result = mysqli_query($conn, $sql);
 
-                        <?php
+                            // Xử lý kết quả
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    ?>
+                                    <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                                    <div class="mb-3 mt-3">
+                                        <label for="giatien" class="form-label">Giá tiền:</label>
+                                        <input type="number" class="form-control" id="giatien" placeholder="Nhập giá tiền "
+                                            name="giatien" value="<?php echo $row["GiaTien"]; ?>">
+                                        <label for="thoiluong" class="form-label">Thời lượng:</label>
+                                        <input type="number" class="form-control" id="thoiluong" placeholder="Nhập thời lượng "
+                                            name="thoiluong" value="<?php echo $row["ThoiLuong"]; ?>">
+                                        <button type="submit" class="btn btn-primary">Sửa khóa học</button>
+                                    </div>
+                                    <?php
+                                }
                             }
                         } else {
-                            echo "0 results";
+                            $sql = "SELECT * FROM khoa_hoc";
+                            $result = mysqli_query($conn, $sql);
+                            // Xử lý kết quả
+                            if (mysqli_num_rows($result) > 0) {
+                                // Lặp qua từng dòng dữ liệu
+                        
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    // Xử lý dòng dữ liệu, ví dụ:
+                                    ?>
+                                    <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                                    <?php
+                                }
+                            } else {
+                                echo "0 results";
+                            }
+                            ?>
+                            <div class="mb-3 mt-3">
+                                <label for="giatien" class="form-label">Giá tiền:</label>
+                                <input type="number" class="form-control" id="giatien" placeholder="Nhập giá tiền "
+                                    name="giatien">
+                                <label for="thoiluong" class="form-label">Thời lượng:</label>
+                                <input type="number" class="form-control" id="thoiluong" placeholder="Nhập thời lượng "
+                                    name="thoiluong">
+                                <button type="submit" class="btn btn-primary">Sửa khóa học</button>
+                            </div>
+                            <?php
                         }
-                        // mysqli_close($conn);
+
                         ?>
 
                     </select>
                 </div>
-                             
-                <div class="mb-3 mt-3">
-                    <label for="giatien" class="form-label">Giá tiền:</label>
-                    <input type="number" class="form-control" id="giatien" placeholder="Nhập giá tiền " name="giatien">
-                    <label for="thoiluong" class="form-label">Thời lượng:</label>
-                    <input type="number" class="form-control" id="thoiluong" placeholder="Nhập thời lượng " name="thoiluong">
-                </div>
-                                
-                <button type="submit" class="btn btn-primary">Sửa khóa học</button>
+
+
+                
             </form>
         </div>
 

@@ -1,6 +1,9 @@
 <?php
 session_start();
 ob_start();
+if (!isset($_SESSION['user_data'])){
+    header('location: signin.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,23 +67,41 @@ ob_start();
                     <select class="form-select" id="makhoahoc" name="id">
                         <?php
                         include("connect.php");
-                        $sql = "SELECT * FROM khoa_hoc";
-                        $result = mysqli_query($conn, $sql);
-                        // Xử lý kết quả
-                        if (mysqli_num_rows($result) > 0) {
-                            // Lặp qua từng dòng dữ liệu
+                        if (isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $sql = "SELECT * FROM khoa_hoc WHERE MaKhoaHoc = '$id'";
 
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                // Xử lý dòng dữ liệu, ví dụ:
-                        ?>
-                                <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                            // Thực thi truy vấn
+                            $result = mysqli_query($conn, $sql);
 
-                        <?php
+                            // Xử lý kết quả
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    ?>
+                                    <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                                    <?php
+                                }
                             }
                         } else {
-                            echo "0 results";
+                            $sql = "SELECT * FROM khoa_hoc";
+                            $result = mysqli_query($conn, $sql);
+                            // Xử lý kết quả
+                            if (mysqli_num_rows($result) > 0) {
+                                // Lặp qua từng dòng dữ liệu
+                        
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    // Xử lý dòng dữ liệu, ví dụ:
+                                    ?>
+                                    <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                                    <?php
+                                }
+                            } else {
+                                echo "0 results";
+                            }
+                            ?>
+                        
+                            <?php
                         }
-                        // mysqli_close($conn);
                         ?>
 
                     </select>

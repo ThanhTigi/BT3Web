@@ -1,6 +1,9 @@
 <?php 
 	session_start();
 	ob_start();
+	if (!isset($_SESSION['user_data'])){
+		header('location: signin.php');
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,55 +56,70 @@
 	<!-- Page info end -->
 
 
-	<div class="container mb-10" style="margin-top:94px;" id="khohang-card">
+	<div class="container " id="body-kho1">
+            <h4 class="text-center" style="margin-top: 75px;">Danh sách sản phẩm</h4>
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Mã Khóa Học</th>
+                        <th scope="col">Tên Khóa Học</th>
+                        <th scope="col">Giá nhập</th>
+						<th scope="col">Thời lượng</th>
+                        <th scope="col">Số lượng đã bán</th>
+						<th scope="col">Loại khóa học</th>
+                        <th scope="col" colspan="2">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr> -->
+                    <?php
+                    include("connect.php");
+                    $cnt = 1;
+                    $sql = "SELECT * from khoa_hoc";
 
-		<div class="row">
-			<div class="col-md-10">
-				<h2>Danh sách các khóa học</h2>
-				<p>Số lượng khóa học đã bán </p>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>STT</th>
-							<th>Tên Khóa Học</th>
-							<th>Giá Tiền</th>
-							<th>Thời Lượng (giờ)</th>
-							<th>Số Lượng Đã Bán</th>
-							<th>Loại Khóa Học</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						include ("connect.php");
+                    // Thực thi truy vấn
+                    $result = mysqli_query($conn, $sql);
 
-						// Câu lệnh SQL lấy tất cả các thuộc tính
-						$sql = "SELECT MaKhoaHoc, TenKhoaHoc, GiaTien, ThoiLuong, SLDaBan, LoaiKhoaHoc FROM khoa_hoc";
-						$cnt_stt = 1;
-						$result = mysqli_query($conn, $sql);
-						if (mysqli_num_rows($result) > 0) {
-							while ($row = mysqli_fetch_assoc($result)) {
-								echo ' <tr>
-                    			<td>' . $cnt_stt++ . '</td>
-                    			<td>' . $row['TenKhoaHoc'] . '</td>
-                    			<td>' . number_format($row['GiaTien'], 0, ',', '.') . ' VND</td>
-                    			<td>' . $row['ThoiLuong'] . '</td>
-                    			<td>' . $row['SLDaBan'] . '</td>
-                    			<td>' . $row['LoaiKhoaHoc'] . '</td>
-                				</tr>';
-							
-							}
-						} else {
-							echo '<tr><td colspan="7">Không có dữ liệu</td></tr>';
-						}
-						?>
-					</tbody>
-				</table>
+                    // Xử lý kết quả
+                    if (mysqli_num_rows($result) > 0) {
+                        // Lặp qua từng dòng dữ liệu
+
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            // Xử lý dòng dữ liệu, ví dụ:
+                    ?>
+                            <tr>
+                                <th scope="row"><?php echo $cnt;
+                                                $cnt++ ?></th>
+                                <td>
+                                    <?php echo $row["MaKhoaHoc"]; ?>
+                                </td>
+                                <td><?php echo $row["TenKhoaHoc"]; ?></td>
+                                <td><?php echo $row["GiaTien"]; ?></td>
+                                <td><?php echo $row["ThoiLuong"]; ?></td>
+                                <td><?php echo $row["SLDaBan"]; ?></td>
+								<td><?php echo $row["LoaiKhoaHoc"]; ?></td>
+                                <td><a class="btn btn-primary" href="updatecourse.php?id=<?php echo $row["MaKhoaHoc"]; ?>">sửa</a></td>
+                                <td><a href="deletecourse.php?id=<?php echo $row["MaKhoaHoc"]; ?>" class="btn btn-danger">xóa</a></td>
+                            </tr>
 
 
-			
+                    <?php
+                        }
+                    } else {
+                        echo "0 results";
+                    }
+                    mysqli_close($conn);
+                    ?>
 
-
-		</div>
+                </tbody>
+            </table>
+        </div>
 
 
 	<!-- banner section 
