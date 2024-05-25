@@ -63,7 +63,7 @@ if (!isset($_SESSION['user_data'])) {
             <form action="xu_ly_sua_khoa_hoc.php" method="post">
                 <div class="mb-3 mt-3">
                     <label for="makhoahoc" class="form-label">Tên Khóa Học:</label>
-                    <select class="form-select" id="makhoahoc" name="makhoahoc">
+                    
                         <?php
                         include ("connect.php");
                         if (isset($_GET['id'])) {
@@ -77,7 +77,9 @@ if (!isset($_SESSION['user_data'])) {
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     ?>
+                                    <select class="form-select" id="makhoahoc" name="makhoahoc">
                                     <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                                    </select>
                                     <div class="mb-3 mt-3">
                                         <label for="giatien" class="form-label">Giá tiền:</label>
                                         <input type="number" class="form-control" id="giatien" placeholder="Nhập giá tiền "
@@ -96,13 +98,21 @@ if (!isset($_SESSION['user_data'])) {
                             // Xử lý kết quả
                             if (mysqli_num_rows($result) > 0) {
                                 // Lặp qua từng dòng dữ liệu
-                        
+                                ?> 
+                                <select class="form-select" id="makhoahoc" name="makhoahoc">
+                                <?php
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     // Xử lý dòng dữ liệu, ví dụ:
                                     ?>
+                                    
                                     <option value="<?php echo $row["MaKhoaHoc"]; ?>"><?php echo $row["TenKhoaHoc"]; ?></option>
+                                
                                     <?php
                                 }
+                                ?>
+                                </select>
+                                <?php
+
                             } else {
                                 echo "0 results";
                             }
@@ -120,12 +130,8 @@ if (!isset($_SESSION['user_data'])) {
                         }
 
                         ?>
-
-                    </select>
                 </div>
 
-
-                
             </form>
         </div>
 

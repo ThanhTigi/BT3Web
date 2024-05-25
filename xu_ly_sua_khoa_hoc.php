@@ -1,7 +1,7 @@
 <?php
 include 'connect.php';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST['giatien']) && isset($_POST['thoiluong'])) {
-    $id = $_POST['id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['makhoahoc']) && isset($_POST['giatien']) && isset($_POST['thoiluong'])) {
+    $id = $_POST['makhoahoc'];
     $giatien = $_POST['giatien'];
     $thoiluong = $_POST['thoiluong'];
 

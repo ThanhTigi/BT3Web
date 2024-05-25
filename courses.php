@@ -64,7 +64,7 @@
                         <th scope="col">STT</th>
                         <th scope="col">Mã Khóa Học</th>
                         <th scope="col">Tên Khóa Học</th>
-                        <th scope="col">Giá nhập</th>
+                        <th scope="col">Giá tiền</th>
 						<th scope="col">Thời lượng</th>
                         <th scope="col">Số lượng đã bán</th>
 						<th scope="col">Loại khóa học</th>

@@ -108,8 +108,8 @@ if (mysqli_num_rows($result) > 0) {
 		<div class="container mb-10" style="margin-top:94px;" id="khohang-card">
 			<div class="row">
 				<div class="col-md-10">
-					<h2>Danh sách các khóa học</h2>
-					<p>Số lượng khóa học đã bán</p>
+					<h2>Danh sách các loại khóa học</h2>
+					<p>Số lượng loại khóa học đã bán</p>
 					<table class="table table-striped">
 						<thead>
 							<tr>

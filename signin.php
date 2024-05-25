@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-include("user.php");
+include ("user.php");
 if (isset($_SESSION["signupsuccess"]) && $_SESSION['signupsuccess']) {
 	echo 'Đăng ký thành công';
 	unset($_SESSION["signupsuccess"]);
@@ -14,8 +14,11 @@ if (isset($_POST["dangnhap"]) && $_POST["dangnhap"]) {
 	$user_data = checkUser($user, $pass);
 	if ($user_data) {
 		$_SESSION['user_data'] = $user_data;
-		header('location: index.php');
-		echo 'Đăng nhập thành công';
+		if ($user_data['role'] == 1) {
+			header('location: index.php');
+		} else {
+			header('location: home.php');
+		}
 	} else {
 		echo 'Tài khoản hoặc mật khẩu không đúng';
 	}
