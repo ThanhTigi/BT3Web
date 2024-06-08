@@ -59,7 +59,7 @@ $result = $conn->query($sql);
     <section class="course-section spad">
         <div class="container">
             <div class="section-title mb-0">
-                <h2>Các Khóa Học Nổi Bật</h2>
+                <h2>Các Khóa Học của chúng tôi</h2>
             </div>
         </div>
         <div class="course-warp">
