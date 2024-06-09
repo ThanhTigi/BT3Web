@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['makhoahoc']) && isset
         // Nếu cần thêm logic insert vào bảng tblphieunhap, hãy thêm ở đây
 
         echo '<script>
-        alert("Cập nhật sản phẩm thành công");
+        alert("Cập nhật khóa học thành công");
         window.location.href = "courses.php";
         </script>';
         exit(); // Đảm bảo script dừng lại sau khi chuyển hướng
