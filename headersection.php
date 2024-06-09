@@ -61,7 +61,14 @@ if (isset($_SESSION['user_data']) && $_SESSION['user_data']['role'] == 1) {
 					
 					<nav class="main-menu">
 						<ul>
-						<li><a href="index.php">Trang chủ</a></li>
+							<?php
+							if (isset($_SESSION['user_data'])) {
+								echo '<li><a href="home.php">Trang chủ</a></li>';
+							}
+							else {	
+								echo '<li><a href="index.php">Trang chủ</a></li>';
+							}
+							?>
 							<li><a href="about.php">Giới thiệu</a></li>
 							<li><a href="contact.php">Liên hệ</a></li>
 						</ul>
